@@ -1,0 +1,196 @@
+import java.awt.BorderLayout;
+import java.awt.EventQueue;
+
+import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JLabel;
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.LinkedList;
+
+import javax.swing.JList;
+import javax.swing.JScrollBar;
+import javax.swing.JTextArea;
+import javax.swing.JProgressBar;
+import javax.swing.JFormattedTextField;
+
+
+
+public class MainPage extends JFrame {
+
+	private JPanel contentPane;
+	private JTextField txtTableName;
+	private JTextField txtQInfo;
+	private JTextField txtNumb;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					MainPage frame = new MainPage();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 * @throws ClassNotFoundException 
+	 * @throws SQLException 
+	 */
+	public MainPage() throws ClassNotFoundException, SQLException {
+			
+		
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 782, 614);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(null);
+		
+		JLabel logo = new JLabel(new ImageIcon(getClass().getResource("Drawing.png")));
+		logo.setBounds(43, 11, 700, 238);
+		contentPane.add(logo);
+
+		final JFormattedTextField txtInfo = new JFormattedTextField();
+		txtInfo.setBounds(10, 278, 361, 287);
+		contentPane.add(txtInfo);
+		
+		JButton btnCreateTable = new JButton("Create Table");
+		btnCreateTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String txtName = txtTableName.getText();
+				String txtContent = txtInfo.getText();
+				try
+				{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@oracle.scs.ryerson.ca:1521:orcl", "ndesanto","10216917");
+				Statement st=con.createStatement();
+				//DONT ADD SEMI COLON AT END MUST BE SQL RUNNABLE
+				String sql="CREATE TABLE "+txtName+txtContent; 
+				ResultSet rs=st.executeQuery(sql);
+				con.close();
+				}
+				catch(Exception e1)
+				{
+					System.out.println(e1);
+				}
+			}
+		});
+		btnCreateTable.setBounds(381, 302, 155, 79);
+		contentPane.add(btnCreateTable);
+		
+		txtTableName = new JTextField();
+		txtTableName.setBounds(458, 278, 165, 20);
+		contentPane.add(txtTableName);
+		txtTableName.setColumns(10);
+		
+		JLabel lblNewLabel = new JLabel("Enter Table Name");
+		lblNewLabel.setBounds(491, 260, 102, 14);
+		contentPane.add(lblNewLabel);
+		
+		JButton btnAddValue = new JButton("Populate Table");
+		btnAddValue.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String txtName = txtTableName.getText();
+				String txtContent = txtInfo.getText();
+				try
+				{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@oracle.scs.ryerson.ca:1521:orcl", "ndesanto","10216917");
+				Statement st=con.createStatement();
+				//DONT ADD SEMI COLON AT END MUST BE SQL RUNNABLE
+				String sql="INSERT INTO "+"\""+txtName+"\""+txtContent; 
+				ResultSet rs=st.executeQuery(sql);
+				con.close();
+				}
+				catch(Exception e1)
+				{
+					System.out.println(e1);
+				}
+			}
+		});
+		btnAddValue.setBounds(570, 302, 155, 79);
+		contentPane.add(btnAddValue);
+		
+		JButton btnDropTable = new JButton("Delete Table");
+		btnDropTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String txtName = txtTableName.getText();
+				try
+				{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@oracle.scs.ryerson.ca:1521:orcl", "ndesanto","10216917");
+				Statement st=con.createStatement();
+				//DONT ADD SEMI COLON AT END MUST BE SQL RUNNABLE
+				String sql="DROP TABLE "+txtName;
+				ResultSet rs=st.executeQuery(sql);
+				con.close();
+				}
+				catch(Exception e1)
+				{
+					System.out.println(e1);
+				}
+			}
+		});
+		btnDropTable.setBounds(381, 392, 155, 79);
+		contentPane.add(btnDropTable);
+		
+		JButton btnQuery = new JButton("Query the Database");
+		btnQuery.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String txtQuery = txtQInfo.getText();
+				try
+				{
+				Class.forName("oracle.jdbc.driver.OracleDriver");
+				Connection con=DriverManager.getConnection("jdbc:oracle:thin:@oracle.scs.ryerson.ca:1521:orcl", "ndesanto","10216917");
+				Statement st=con.createStatement();
+				//DONT ADD SEMI COLON AT END MUST BE SQL RUNNABLE
+				String sql= txtQuery;
+				ResultSet rs=st.executeQuery(sql);
+				while(rs.next())
+					System.out.println(rs.getString(1)+" "+ rs.getString(2)+" "+ rs.getString(3)+" "+ rs.getString(4)+" "+ rs.getString(5));
+				con.close();
+				}
+				catch(Exception e1)
+				{
+					System.out.println(e1);
+				}
+			}
+		});
+		btnQuery.setBounds(570, 392, 155, 79);
+		contentPane.add(btnQuery);
+		
+		txtQInfo = new JTextField();
+		txtQInfo.setColumns(10);
+		txtQInfo.setBounds(381, 507, 362, 20);
+		contentPane.add(txtQInfo);
+		
+		JLabel lblQuery = new JLabel("Enter the query");
+		lblQuery.setBounds(381, 482, 165, 14);
+		contentPane.add(lblQuery);
+		
+		JLabel lblEnterThe = new JLabel("Enter the contents of the table you want to create or populate");
+		lblEnterThe.setBounds(10, 260, 325, 14);
+		contentPane.add(lblEnterThe);
+		
+	
+	}
+}
