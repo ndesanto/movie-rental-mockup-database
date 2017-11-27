@@ -20,10 +20,14 @@ import java.sql.Statement;
 import java.util.LinkedList;
 
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
 import javax.swing.JProgressBar;
 import javax.swing.JFormattedTextField;
+import javax.swing.JEditorPane;
+import javax.swing.JTextPane;
+import javax.swing.SwingConstants;
 
 
 
@@ -59,18 +63,18 @@ public class MainPage extends JFrame {
 			
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 782, 614);
+		setBounds(100, 100, 845, 617);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		JLabel logo = new JLabel(new ImageIcon(getClass().getResource("Drawing.png")));
-		logo.setBounds(43, 11, 700, 238);
+		logo.setBounds(0, 11, 819, 238);
 		contentPane.add(logo);
 
 		final JFormattedTextField txtInfo = new JFormattedTextField();
-		txtInfo.setBounds(10, 278, 361, 287);
+		txtInfo.setBounds(10, 278, 371, 287);
 		contentPane.add(txtInfo);
 		
 		JButton btnCreateTable = new JButton("Create Table");
@@ -94,16 +98,17 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
-		btnCreateTable.setBounds(381, 302, 155, 79);
+		btnCreateTable.setBounds(412, 342, 188, 79);
 		contentPane.add(btnCreateTable);
 		
 		txtTableName = new JTextField();
-		txtTableName.setBounds(458, 278, 165, 20);
+		txtTableName.setBounds(412, 318, 407, 20);
 		contentPane.add(txtTableName);
 		txtTableName.setColumns(10);
 		
 		JLabel lblNewLabel = new JLabel("Enter Table Name");
-		lblNewLabel.setBounds(491, 260, 102, 14);
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(412, 300, 407, 14);
 		contentPane.add(lblNewLabel);
 		
 		JButton btnAddValue = new JButton("Populate Table");
@@ -127,7 +132,7 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
-		btnAddValue.setBounds(570, 302, 155, 79);
+		btnAddValue.setBounds(631, 342, 188, 79);
 		contentPane.add(btnAddValue);
 		
 		JButton btnDropTable = new JButton("Delete Table");
@@ -150,8 +155,9 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
-		btnDropTable.setBounds(381, 392, 155, 79);
+		btnDropTable.setBounds(412, 432, 188, 79);
 		contentPane.add(btnDropTable);
+		
 		
 		JButton btnQuery = new JButton("Query the Database");
 		btnQuery.addActionListener(new ActionListener() {
@@ -165,8 +171,38 @@ public class MainPage extends JFrame {
 				//DONT ADD SEMI COLON AT END MUST BE SQL RUNNABLE
 				String sql= txtQuery;
 				ResultSet rs=st.executeQuery(sql);
-				while(rs.next())
-					System.out.println(rs.getString(1)+" "+ rs.getString(2)+" "+ rs.getString(3)+" "+ rs.getString(4)+" "+ rs.getString(5));
+				while(rs.next()){
+					try{
+					JOptionPane.showMessageDialog(null,rs.getString(1)+" "+ rs.getString(2)+" "+ rs.getString(3)+" "+ rs.getString(4)+" "+ rs.getString(5));
+					continue;
+					}catch(Exception e1){
+						System.out.println("");
+					}
+					try{
+						JOptionPane.showMessageDialog(null,rs.getString(1)+" "+ rs.getString(2)+" "+ rs.getString(3)+" "+ rs.getString(4));
+						continue;
+						}catch(Exception e1){
+							System.out.println("");
+						}
+					try{
+						JOptionPane.showMessageDialog(null,rs.getString(1)+" "+ rs.getString(2)+" "+ rs.getString(3));
+						continue;
+						}catch(Exception e1){
+							System.out.println("");
+						}
+					try{
+						JOptionPane.showMessageDialog(null,rs.getString(1)+" "+ rs.getString(2));
+						continue;
+						}catch(Exception e1){
+							System.out.println("");
+						}
+					try{
+						JOptionPane.showMessageDialog(null,rs.getString(1));
+						continue;
+						}catch(Exception e1){
+							System.out.println("");
+						}
+				}
 				con.close();
 				}
 				catch(Exception e1)
@@ -175,16 +211,17 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
-		btnQuery.setBounds(570, 392, 155, 79);
+		btnQuery.setBounds(631, 432, 188, 79);
 		contentPane.add(btnQuery);
 		
 		txtQInfo = new JTextField();
 		txtQInfo.setColumns(10);
-		txtQInfo.setBounds(381, 507, 362, 20);
+		txtQInfo.setBounds(412, 545, 407, 20);
 		contentPane.add(txtQInfo);
 		
 		JLabel lblQuery = new JLabel("Enter the query");
-		lblQuery.setBounds(381, 482, 165, 14);
+		lblQuery.setHorizontalAlignment(SwingConstants.CENTER);
+		lblQuery.setBounds(412, 522, 407, 14);
 		contentPane.add(lblQuery);
 		
 		JLabel lblEnterThe = new JLabel("Enter the contents of the table you want to create or populate");
@@ -192,5 +229,8 @@ public class MainPage extends JFrame {
 		contentPane.add(lblEnterThe);
 		
 	
+		
+	
+		
 	}
 }
